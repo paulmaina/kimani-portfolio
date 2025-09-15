@@ -1,19 +1,36 @@
 import React from 'react';
 import {FaNetworkWired, FaCloud, FaDocker} from 'react-icons/fa';
-import { SiKubernetes } from "react-icons/si";
+import { TbInfinity, TbAutomation } from "react-icons/tb";
+import { SiKubernetes, SiArgo } from "react-icons/si";
+import { FaMagnifyingGlassChart } from "react-icons/fa6";
 import workspaceImg from '../assets/workspace.jpg'; // <-- Import your image here
 
 const About = () => {
   const skills = [
     {
-      category: 'Coputer Networking & Security',
+      category: 'Computer Networking | Security',
       icon: <FaNetworkWired className="h-10 w-10" />,
-      technologies: ['OSI & TCP/IP Models', 'IP Addressing & Subnetting', 'Routing & Switching', 'DNS', 'Network Security']
+      technologies: ['OSI & TCP/IP Models', 'IP Addressing & Subnetting', 'Routing & Switching', 'DNS', 'Network Security', 'Cryptography']
     },
     {
       category: 'Cloud Computing(AWS, GCP, Oracle Cloud)',
       icon: <FaCloud className="h-10 w-10" />, 
-      technologies: ['Compute', 'Storage & Databases', 'Networking & IAM', 'Serverless', 'IaC']
+      technologies: ['Compute', 'Storage & Databases', 'Networking & IAM', 'Serverless', 'IaC', 'DaaS']
+    },
+    {
+      category: 'CI/CD',
+      icon: <TbInfinity className="h-10 w-10" />,
+      technologies: ['GitLab CI/CD', 'GitHub Actions', 'Workflow Automation', 'Artifact Management', 'Pipeline Optimization', 'Linting']
+    },
+    {
+      category: 'Scripting | Automation',
+      icon: <TbAutomation className="h-10 w-10" />,
+      technologies: ['Bash', 'Python', 'Terraform', 'Ansible', 'Dockerfiles', 'OCI CLI']
+    },
+    {
+      category: 'Telemetry | Monitoring | Observability',
+      icon: <FaMagnifyingGlassChart className="h-10 w-10" />,
+      technologies: ['Prometheus', 'OpenTelemetry', 'Grafana', 'EFK Stack']
     },
     {
       category: 'Docker/Podman',
@@ -23,8 +40,15 @@ const About = () => {
     {
       category: 'Kubernetes',
       icon: <SiKubernetes className="h-10 w-10" />,
-      technologies: ['Pod Management', 'Declarative Deployments', 'Service Discovery', 'Secrets & ConfigMaps', 'Ingress & TLS Routing']
+      technologies: ['Pod Management', 'Declarative Deployments', 'Service Discovery', 'Secrets & ConfigMaps', 'Ingress & TLS Routing', 'Helm Charts']
+    },
+    {
+      category: 'Argo CD',
+      icon: <SiArgo className="h-10 w-10" />,
+      technologies: ['GitOps Sync', 'Application CRDs', 'Automated Rollbacks', 'Multi-Cluster Management', 'Health & Drift Detection']
     }
+
+
   ];
 
   return (
