@@ -74,7 +74,7 @@ const Contact = () => {
         const fallbackError = payload?.error || raw || 'Failed to submit';
         throw new Error(fallbackError);
       }
-      showToast('success', 'Thank you for your message! I will get back to you soon🙂');
+      showToast('success', 'Thank you for your message! I will get back to you soon😊');
       setFormData({ name: '', email: '', subject: '', message: '', company: '' });
       setCaptchaToken('');
       try {
@@ -137,7 +137,7 @@ const Contact = () => {
             </div>
 
             <div>
-              <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Follow Me😉</h4>
+              <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Follow Me😊</h4>
               <div className="flex space-x-4">
                 <a
                   href="https://github.com/paulmaina"
