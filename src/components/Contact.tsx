@@ -8,8 +8,10 @@ const Contact = () => {
     name: '',
     email: '',
     subject: '',
-    message: ''
+    message: '',
+    company: '' // honeypot
   });
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -18,12 +20,34 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real application, you would send this data to your backend
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message! I\'ll get back to you soon.');
-    setFormData({ name: '', email: '', subject: '', message: '' });
+    
+    try {
+      const resp = await fetch('/api/submit-message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          company: formData.company,
+        }),
+      });
+      const contentType = resp.headers.get('content-type') || '';
+      const isJson = contentType.includes('application/json');
+      const raw = isJson ? await resp.text() : await resp.text();
+      const payload = isJson && raw ? (() => { try { return JSON.parse(raw); } catch { return null; } })() : null;
+      if (!resp.ok) {
+        const fallbackError = payload?.error || raw || 'Failed to submit';
+        throw new Error(fallbackError);
+      }
+      alert('Thank you for your message!');
+      setFormData({ name: '', email: '', subject: '', message: '', company: '' });
+    } catch (err: any) {
+      alert(err?.message || 'Failed to submit');
+    }
   };
 
   return (
@@ -106,6 +130,7 @@ const Contact = () => {
           </div>
 
           {/* Contact Form */}
+
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-8 border border-slate-100 dark:border-slate-700">
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Send a Message</h3>
             
@@ -173,6 +198,21 @@ const Contact = () => {
                   rows={6}
                   className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-none hover:border-slate-400 dark:hover:border-slate-500"
                   placeholder="Tell me about your project..."
+                />
+              </div>
+              {/* Honeypot field - keep hidden from users */}
+              <div className="hidden" aria-hidden="true">
+                <label htmlFor="company" className="block text-sm mb-2">Company</label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleChange}
+                  autoComplete="off"
+                  tabIndex={-1}
+                  className="w-full px-4 py-3 border rounded-lg"
+                  placeholder="Leave this field empty"
                 />
               </div>
               
