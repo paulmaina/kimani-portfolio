@@ -74,7 +74,7 @@ const Contact = () => {
         const fallbackError = payload?.error || raw || 'Failed to submit';
         throw new Error(fallbackError);
       }
-      showToast('success', 'Thank you for your message!');
+      showToast('success', 'Thank you for your message! I will get back to you soon🙂');
       setFormData({ name: '', email: '', subject: '', message: '', company: '' });
       setCaptchaToken('');
       try {
