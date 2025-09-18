@@ -7,7 +7,7 @@ const Portfolio = () => {
     {
       title: 'Your Project Title',
       description: 'Detailed description of your project, what it does, and the problems it solves.',
-      image: 'https://images.pexels.com/photos/your-image-id/pexels-photo.jpeg?auto=compress&cs=tinysrgb&w=600',
+      image: '/images/project-1.jpg',
       technologies: ['Your', 'Tech', 'Stack'],
       liveUrl: 'https://your-live-site.com',
       githubUrl: 'https://github.com/yourusername/project'
@@ -15,7 +15,7 @@ const Portfolio = () => {
     {
       title: 'Task Management App',
       description: 'Collaborative project management tool with real-time updates, drag-and-drop functionality, and team collaboration features.',
-      image: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600',
+      image: '/images/task-app.jpg',
       technologies: ['Vue.js', 'Firebase', 'Vuetify', 'WebSocket'],
       liveUrl: 'https://example.com',
       githubUrl: 'https://github.com'
@@ -23,7 +23,7 @@ const Portfolio = () => {
     {
       title: 'Weather Dashboard',
       description: 'Modern weather application with location-based forecasts, interactive maps, and beautiful data visualizations.',
-      image: 'https://images.pexels.com/photos/1118873/pexels-photo-1118873.jpeg?auto=compress&cs=tinysrgb&w=600',
+      image: '/images/weather-dashboard.jpg',
       technologies: ['React', 'D3.js', 'Weather API', 'Chart.js'],
       liveUrl: 'https://example.com',
       githubUrl: 'https://github.com'
@@ -37,7 +37,7 @@ const Portfolio = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Featured Projects</h2>
           <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto mb-6 rounded-full"></div>
           <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto font-medium">
-            A selection of projects that showcase my skills in full-stack development, UI/UX design, and problem-solving.
+          A showcase of projects that demonstrate my passion and ability to streamline deployments, automate workflows, and design resilient cloud-native solutions.
           </p>
         </div>
 
