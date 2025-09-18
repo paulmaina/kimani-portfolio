@@ -17,6 +17,8 @@ HEADERS = {
 
 EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 
+HCAPTCHA_SECRET = os.getenv("HCAPTCHA_SECRET") or ""
+
 @app.post("/api/submit-message")
 async def submit_message(req: Request):
   if not SUPABASE_URL or not SERVICE_KEY:
@@ -32,6 +34,7 @@ async def submit_message(req: Request):
   subject = (body.get("subject") or "").strip()
   message = (body.get("message") or "").strip()
   company = (body.get("company") or "").strip()
+  captcha_token = (body.get("captchaToken") or "").strip()
 
   # Honeypot
   if company:
@@ -41,6 +44,20 @@ async def submit_message(req: Request):
     return JSONResponse({"error": "Missing required fields"}, status_code=400)
   if not EMAIL_RE.match(email):
     return JSONResponse({"error": "Invalid email"}, status_code=400)
+
+  # Verify hCaptcha when configured
+  if HCAPTCHA_SECRET:
+    try:
+      verify = requests.post(
+        "https://hcaptcha.com/siteverify",
+        data={"secret": HCAPTCHA_SECRET, "response": captcha_token},
+        timeout=10,
+      )
+      vj = verify.json()
+      if not vj.get("success"):
+        return JSONResponse({"error": "CAPTCHA verification failed"}, status_code=400)
+    except Exception:
+      return JSONResponse({"error": "CAPTCHA verification failed"}, status_code=400)
 
   ip = (req.headers.get("x-forwarded-for", "").split(",")[0].strip()) or (req.client.host if req.client else "unknown") or "unknown"
 

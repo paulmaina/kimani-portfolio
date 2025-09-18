@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { HiMail, HiPhone, HiLocationMarker, HiPaperAirplane } from 'react-icons/hi';
 import { FaGithub, FaLinkedin} from 'react-icons/fa';
 import { FaSquareXTwitter } from "react-icons/fa6";
 
 const Contact = () => {
+  const siteKey = (import.meta as any).env?.VITE_HCAPTCHA_SITEKEY as string | undefined;
+  const captchaContainerRef = useRef<HTMLDivElement | null>(null);
+  const widgetIdRef = useRef<any>(null);
+  const [captchaToken, setCaptchaToken] = useState<string>('');
+  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,10 +25,35 @@ const Contact = () => {
     });
   };
 
+  // Initialize hCaptcha when script is available
+  useEffect(() => {
+    const tryRender = () => {
+      const w = (window as any);
+      if (!siteKey || !captchaContainerRef.current || !w.hcaptcha) return;
+      if (widgetIdRef.current !== null) return;
+      widgetIdRef.current = w.hcaptcha.render(captchaContainerRef.current, {
+        sitekey: siteKey,
+        callback: (token: string) => setCaptchaToken(token),
+      });
+    };
+    tryRender();
+    const id = setInterval(tryRender, 500);
+    return () => clearInterval(id);
+  }, [siteKey]);
+
+  const showToast = (type: 'success' | 'error', message: string) => {
+    setToast({ type, message });
+    setTimeout(() => setToast(null), 3500);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
+      if (siteKey && !captchaToken) {
+        showToast('error', 'Please complete the CAPTCHA');
+        return;
+      }
       const resp = await fetch('/api/submit-message', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -33,6 +63,7 @@ const Contact = () => {
           subject: formData.subject,
           message: formData.message,
           company: formData.company,
+          captchaToken,
         }),
       });
       const contentType = resp.headers.get('content-type') || '';
@@ -43,10 +74,17 @@ const Contact = () => {
         const fallbackError = payload?.error || raw || 'Failed to submit';
         throw new Error(fallbackError);
       }
-      alert('Thank you for your message!');
+      showToast('success', 'Thank you for your message!');
       setFormData({ name: '', email: '', subject: '', message: '', company: '' });
+      setCaptchaToken('');
+      try {
+        const w = (window as any);
+        if (widgetIdRef.current !== null && w?.hcaptcha?.reset) {
+          w.hcaptcha.reset(widgetIdRef.current);
+        }
+      } catch {}
     } catch (err: any) {
-      alert(err?.message || 'Failed to submit');
+      showToast('error', err?.message || 'Failed to submit');
     }
   };
 
@@ -168,6 +206,12 @@ const Contact = () => {
                   />
                 </div>
               </div>
+              {/* hCaptcha widget */}
+              {siteKey && (
+                <div>
+                  <div ref={captchaContainerRef} className="h-captcha" data-sitekey={siteKey}></div>
+                </div>
+              )}
               
               <div>
                 <label htmlFor="subject" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
@@ -228,6 +272,12 @@ const Contact = () => {
               </button>
             </form>
           </div>
+          {/* Toast */}
+          {toast && (
+            <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-lg shadow-lg text-white ${toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'}`}>
+              {toast.message}
+            </div>
+          )}
         </div>
       </div>
     </section>
