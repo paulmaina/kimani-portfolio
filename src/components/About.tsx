@@ -1,7 +1,7 @@
 import React from 'react';
 import {FaNetworkWired, FaCloud, FaDocker} from 'react-icons/fa';
 import { TbInfinity, TbAutomation } from "react-icons/tb";
-import { SiKubernetes, SiArgo } from "react-icons/si";
+import { SiKubernetes, SiArgo, SiTerraform } from "react-icons/si";
 import { FaMagnifyingGlassChart } from "react-icons/fa6";
 import workspaceImg from '../assets/workspace.jpg'; // <-- Import your image here
 
@@ -13,7 +13,7 @@ const About = () => {
       technologies: ['OSI & TCP/IP Models', 'IP Addressing & Subnetting', 'Routing & Switching', 'DNS', 'Network Security', 'Cryptography']
     },
     {
-      category: 'Cloud Computing(AWS, GCP, Oracle Cloud)',
+      category: 'Cloud Platforms(AWS, GCP, Oracle Cloud)',
       icon: <FaCloud className="h-10 w-10" />, 
       technologies: ['Compute', 'Storage & Databases', 'Networking & IAM', 'Serverless', 'IaC', 'DaaS']
     },
@@ -30,7 +30,7 @@ const About = () => {
     {
       category: 'Telemetry | Monitoring | Observability',
       icon: <FaMagnifyingGlassChart className="h-10 w-10" />,
-      technologies: ['Prometheus', 'OpenTelemetry', 'Grafana', 'EFK Stack']
+      technologies: ['Prometheus', 'OpenTelemetry', 'Grafana', 'EFK Stack', 'Metrics Collection', 'Distributed Tracing']
     },
     {
       category: 'Docker/Podman',
@@ -46,9 +46,12 @@ const About = () => {
       category: 'Argo CD',
       icon: <SiArgo className="h-10 w-10" />,
       technologies: ['GitOps Sync', 'Application CRDs', 'Automated Rollbacks', 'Multi-Cluster Management', 'Health & Drift Detection']
+    },
+    {
+      category: 'Terraform',
+      icon: <SiTerraform className="h-10 w-10" />,
+      technologies: ['Modular IaC', 'State Management', 'Remote State', 'Provisioners & Providers', 'Workspaces & Environments', 'CI/CD Integration']
     }
-
-
   ];
 
   return (
