@@ -106,7 +106,7 @@ const Hero = () => {
               <img
                 src={myPhoto}
                 alt="Paul Kimani headshot"
-                className="relative w-72 h-72 md:w-80 md:h-80 rounded-3xl shadow-2xl transition-transform duration-500 hover:scale-105 hover:shadow-3xl object-cover z-20 bg-transparent"
+                className="relative rounded-3xl shadow-2xl transition-transform duration-500 hover:scale-105 hover:shadow-3xl object-contain z-20 bg-transparent"
                 style={{ filter: 'contrast(1.05) saturate(1.1)', background: 'transparent' }}
               />
               <div className="absolute inset-0 bg-gradient-to-br from-blue-100/30 via-purple-100/20 to-transparent rounded-3xl blur-xl scale-110 opacity-60 -z-10"></div>
