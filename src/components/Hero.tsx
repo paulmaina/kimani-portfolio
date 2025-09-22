@@ -37,6 +37,9 @@ const Hero = () => {
                 I build modern, resilient infrastructure by automating deployments, integrating secure APIs, 
                 and implementing DevSecOps best practices. With experience across AWS, GCP, Oracle Cloud, Containerization, K8s, GitOps, 
                 and CI/CD pipelines, I design systems that are efficient, secure, and built to scale.
+
+
+                
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-12">
@@ -106,7 +109,7 @@ const Hero = () => {
               <img
                 src={myPhoto}
                 alt="Paul Kimani headshot"
-                className="relative rounded-3xl shadow-2xl transition-transform duration-500 hover:scale-105 hover:shadow-3xl object-contain z-20 bg-transparent"
+                className="relative rounded-3xl shadow-2xl transition-transform duration-500 scale-95 hover:scale-105 hover:shadow-3xl object-contain z-20 bg-transparent"
                 style={{ filter: 'contrast(1.05) saturate(1.1)', background: 'transparent' }}
               />
               <div className="absolute inset-0 bg-gradient-to-br from-blue-100/30 via-purple-100/20 to-transparent rounded-3xl blur-xl scale-110 opacity-60 -z-10"></div>
