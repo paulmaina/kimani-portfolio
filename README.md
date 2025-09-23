@@ -153,7 +153,7 @@ Then open `http://localhost:4173`.
 
 ## Deployment
 
-You can deploy the frontend to any static host (Vercel, Netlify, GitHub Pages, S3/CloudFront): currently hosted in vercel integrated with GitHub which triggers deployement with each commit.
+You can deploy the frontend to any static host (Vercel, Netlify, GitHub Pages, S3/CloudFront): Currently hosted on Vercel, integrated with GitHub for automatic deployments on every commit.
 
 ```bash
 npm run build
