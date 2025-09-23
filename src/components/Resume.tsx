@@ -1,43 +1,45 @@
 import React from 'react';
 import { HiDownload, HiBriefcase, HiAcademicCap } from 'react-icons/hi';
-import { HiDocumentText } from 'react-icons/hi';
+import { PiCertificateDuotone } from "react-icons/pi";
+
 
 const Resume = () => {
   const experiences = [
     {
-      title: 'Your Job Title',
-      company: 'Company Name',
-      period: 'Start Date - End Date',
-      description: 'Description of your role, responsibilities, and achievements.'
+      title: 'Associate DevOps Engineer',
+      company: 'AARO Systems',
+      period: 'June 2023 - Present',
+      description: 'Refactor monolith into microservices, reducing deployment time by 40%. Manage Jenkins/GitHub Actions CI/CD, automate infrastructure with Terraform/Ansible, deploy Kubernetes via Helm/ArgoCD, secure/route APIs with Apigee/NGINX, and monitor systems using Prometheus/Grafana.'
     },
     {
-      title: 'Frontend Developer',
-      company: 'Digital Agency Inc.',
-      period: '2020 - 2022',
-      description: 'Developed responsive web applications for Fortune 500 clients. Collaborated with design teams to implement pixel-perfect UIs and improved site performance by 60%.'
+      title: 'Technical Support ',
+      company: 'AARO Systems',
+      period: 'Feb 2022 - May 2023',
+      description: 'Supported Orange cloud infrastructure for 15+ workloads, improving availability by 15%. Integrated PingOne SSO on CloudFront for 5,000+ users, tested APIs, resolved SQL databases upgrade issues, and re-architected networks, reducing incidents 35%.'
     },
     {
-      title: 'Web Developer',
-      company: 'StartupXYZ',
-      period: '2019 - 2020',
-      description: 'Built the company\'s main product from the ground up using modern web technologies. Implemented user authentication, payment processing, and real-time features.'
+      title: 'Network Engineer/Ass. ICT Project Manager',
+      company: 'Electroserve Ltd',
+      period: 'Nov 2019 - Dec 2021',
+      description: 'Configured and troubleshot IP networks, CCTV, and access control with SMS alerts/mobile surveillance, boosting security responsiveness 60%. Implemented BGP, OSPF, VLANs across 25+ endpoints, ensuring 99.99% availability, and oversaw ICT projects delivering secure, scalable solutions.'
     }
   ];
 
   const education = [
     {
-      degree: 'Bachelor of Science in Computer Science',
-      school: 'State University',
-      period: '2015 - 2019',
-      description: 'Graduated Magna Cum Laude. Focused on web development, algorithms, and software engineering principles.'
+      degree: 'Bachelor of Science in Software Engineering',
+      school: 'Kisii University',
+      period: 'Sep 2015 - Nov 2019',
+      description: 'Focused on Computer Systems Networking and Software Engineering Principles.'
     }
   ];
 
   const certifications = [
+    'KCNA: Kubernetes and Cloud Native Associate',
+    'Oracle Cloud Infrastructure Foundations 2025',
     'Cisco Cetified Network Associate (CCNA)',
-    'Google Cloud Professional',
-    'Meta React Developer',
-    'MongoDB Certified Developer'
+    'API Development on Google Cloud\'s Apigee API Platform',
+    'API Security on Google Cloud\'s Apigee API Platform'
   ];
 
   const handleDownloadResume = () => {
@@ -115,7 +117,7 @@ const Resume = () => {
           <div>
             <div className="bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-800 dark:to-slate-700 rounded-2xl p-6 border border-slate-200 dark:border-slate-600">
               <div className="flex items-center space-x-3 mb-6">
-                <HiDocumentText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                <PiCertificateDuotone className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">Certifications</h3>
               </div>
               
