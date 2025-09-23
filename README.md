@@ -15,7 +15,7 @@ A modern, responsive portfolio built with Vite, React, TypeScript, and Tailwind 
 - Modern gradients, subtle animations, and smooth scrolling
 - Portfolio, About, Resume, and Contact sections
 - Social links (GitHub, LinkedIn) and mailto shortcut
-- Optional contact form backend with rate limiting and hCaptcha verification
+- Contact form backend with rate limiting and hCaptcha verification
 
 ## Project Structure
 
