@@ -5,7 +5,7 @@ A modern, responsive portfolio built with Vite, React, TypeScript, and Tailwind 
 ## Tech Stack
 
 - Frontend: React 18, TypeScript, Vite 7, Tailwind CSS 3, React Icons
-- Backend (optional): FastAPI (Python), Uvicorn ASGI server
+- Backend: FastAPI (Python), Uvicorn ASGI server
 - Data: Supabase REST API (messages table)
 - Tooling: ESLint, PostCSS/Autoprefixer
 
@@ -61,7 +61,7 @@ Frontend runs without env by default. If you enable the backend API integration,
 
 - SUPABASE_URL or VITE_SUPABASE_URL: Base URL of your Supabase project
 - SUPABASE_SERVICE_ROLE_KEY: Service role key for server-side inserts
-- HCAPTCHA_SECRET (optional): Secret for verifying hCaptcha tokens
+- HCAPTCHA_SECRET: Secret for verifying hCaptcha tokens
 
 Notes:
 - The backend looks up `SUPABASE_URL` or falls back to `VITE_SUPABASE_URL`.
