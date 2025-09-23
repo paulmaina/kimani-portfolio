@@ -12,7 +12,7 @@ const Resume = () => {
       description: 'Refactor monolith into microservices, reducing deployment time by 40%. Manage Jenkins/GitHub Actions CI/CD, automate infrastructure with Terraform/Ansible, deploy Kubernetes via Helm/ArgoCD, secure/route APIs with Apigee/NGINX, and monitor systems using Prometheus/Grafana.'
     },
     {
-      title: 'Technical Support ',
+      title: 'Technical Support Consultant',
       company: 'AARO Systems',
       period: 'Feb 2022 - May 2023',
       description: 'Supported Orange cloud infrastructure for 15+ workloads, improving availability by 15%. Integrated PingOne SSO on CloudFront for 5,000+ users, tested APIs, resolved SQL databases upgrade issues, and re-architected networks, reducing incidents 35%.'
@@ -37,7 +37,7 @@ const Resume = () => {
   const certifications = [
     'KCNA: Kubernetes and Cloud Native Associate',
     'Oracle Cloud Infrastructure Foundations 2025',
-    'Cisco Cetified Network Associate (CCNA)',
+    'CCNA: Cisco Cetified Network Associate',
     'API Development on Google Cloud\'s Apigee API Platform',
     'API Security on Google Cloud\'s Apigee API Platform'
   ];
