@@ -5,7 +5,7 @@ A modern, responsive portfolio built with Vite, React, TypeScript, and Tailwind 
 ## Tech Stack
 
 - Frontend: React 18, TypeScript, Vite 7, Tailwind CSS 3, React Icons
-- Backend (optional): FastAPI (Python), Uvicorn ASGI server
+- Backend: FastAPI (Python), Uvicorn ASGI server
 - Data: Supabase REST API (messages table)
 - Tooling: ESLint, PostCSS/Autoprefixer
 
@@ -15,7 +15,7 @@ A modern, responsive portfolio built with Vite, React, TypeScript, and Tailwind 
 - Modern gradients, subtle animations, and smooth scrolling
 - Portfolio, About, Resume, and Contact sections
 - Social links (GitHub, LinkedIn) and mailto shortcut
-- Optional contact form backend with rate limiting and hCaptcha verification
+- Contact form backend with rate limiting and hCaptcha verification
 
 ## Project Structure
 
@@ -61,7 +61,7 @@ Frontend runs without env by default. If you enable the backend API integration,
 
 - SUPABASE_URL or VITE_SUPABASE_URL: Base URL of your Supabase project
 - SUPABASE_SERVICE_ROLE_KEY: Service role key for server-side inserts
-- HCAPTCHA_SECRET (optional): Secret for verifying hCaptcha tokens
+- HCAPTCHA_SECRET: Secret for verifying hCaptcha tokens
 
 Notes:
 - The backend looks up `SUPABASE_URL` or falls back to `VITE_SUPABASE_URL`.
@@ -153,7 +153,7 @@ Then open `http://localhost:4173`.
 
 ## Deployment
 
-You can deploy the frontend to any static host (Vercel, Netlify, GitHub Pages, S3/CloudFront):
+You can deploy the frontend to any static host (Vercel, Netlify, GitHub Pages, S3/CloudFront): Currently hosted on Vercel, integrated with GitHub for automatic deployments on every commit.
 
 ```bash
 npm run build
