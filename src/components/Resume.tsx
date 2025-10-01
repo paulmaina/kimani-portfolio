@@ -14,7 +14,7 @@ const Resume = () => {
     {
       title: 'Technical Support Consultant',
       company: 'AARO Systems',
-      period: 'Feb 2022 - Present ',
+      period: 'Feb 2022 - Present',
       description: 'Supported Orange cloud infrastructure for 15+ workloads, improving availability by 15%. Integrated PingOne SSO on CloudFront for 5,000+ users, tested APIs, resolved SQL databases upgrade issues, and re-architected networks, reducing incidents 35%.'
     },
     {
