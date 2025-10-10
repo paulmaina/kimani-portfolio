@@ -1,7 +1,0 @@
-{
-  "build": {
-    "env": {
-      "VITE_HCAPTCHA_SITEKEY": "@vite_hcaptcha_sitekey"
-    }
-  }
-}
