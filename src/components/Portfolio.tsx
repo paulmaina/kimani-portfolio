@@ -1,35 +1,9 @@
 import React from 'react';
 import { HiExternalLink } from 'react-icons/hi';
 import { FaGithub } from 'react-icons/fa';
+import { projects } from './Projects';
 
 const Portfolio = () => {
-  const projects = [
-    {
-      title: 'Your Project Title',
-      description: 'Detailed description of your project, what it does, and the problems it solves.',
-      image: '/images/project-1.jpg',
-      technologies: ['Your', 'Tech', 'Stack'],
-      liveUrl: 'https://your-live-site.com',
-      githubUrl: 'https://github.com/yourusername/project'
-    },
-    {
-      title: 'Task Management App',
-      description: 'Collaborative project management tool with real-time updates, drag-and-drop functionality, and team collaboration features.',
-      image: '/images/task-app.jpg',
-      technologies: ['Vue.js', 'Firebase', 'Vuetify', 'WebSocket'],
-      liveUrl: 'https://example.com',
-      githubUrl: 'https://github.com'
-    },
-    {
-      title: 'Weather Dashboard',
-      description: 'Modern weather application with location-based forecasts, interactive maps, and beautiful data visualizations.',
-      image: '/images/weather-dashboard.jpg',
-      technologies: ['React', 'D3.js', 'Weather API', 'Chart.js'],
-      liveUrl: 'https://example.com',
-      githubUrl: 'https://github.com'
-    }
-  ];
-
   return (
     <section id="portfolio" className="py-20 bg-gradient-to-b from-slate-50 to-white dark:from-slate-800 dark:to-slate-900 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -37,7 +11,7 @@ const Portfolio = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Featured Projects</h2>
           <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto mb-6 rounded-full"></div>
           <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto font-medium">
-          A showcase of projects that demonstrate my passion and ability to streamline deployments, automate workflows, and design resilient cloud-native solutions.
+            A showcase of projects that demonstrate my passion and ability to streamline deployments, automate workflows, and design resilient cloud-native solutions.
           </p>
         </div>
 
@@ -52,22 +26,26 @@ const Portfolio = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                   <div className="p-4 flex space-x-2">
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-white/90 backdrop-blur-sm text-slate-900 p-2 rounded-full hover:bg-white hover:scale-110 transition-all duration-200 shadow-lg"
-                    >
-                      <HiExternalLink className="h-4 w-4" />
-                    </a>
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-white/90 backdrop-blur-sm text-slate-900 p-2 rounded-full hover:bg-white hover:scale-110 transition-all duration-200 shadow-lg"
-                    >
-                      <FaGithub className="h-4 w-4" />
-                    </a>
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-white/90 backdrop-blur-sm text-slate-900 p-2 rounded-full hover:bg-white hover:scale-110 transition-all duration-200 shadow-lg"
+                      >
+                        <HiExternalLink className="h-4 w-4" />
+                      </a>
+                    )}
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-white/90 backdrop-blur-sm text-slate-900 p-2 rounded-full hover:bg-white hover:scale-110 transition-all duration-200 shadow-lg"
+                      >
+                        <FaGithub className="h-4 w-4" />
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
@@ -77,12 +55,12 @@ const Portfolio = () => {
                 <p className="text-slate-600 dark:text-slate-300 mb-4 line-clamp-3 leading-relaxed">{project.description}</p>
                 
                 <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((tech, techIndex) => (
+                  {project.tags.map((tag, tagIndex) => (
                     <span
-                      key={techIndex}
+                      key={tagIndex}
                       className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-700 dark:text-blue-300 text-xs px-3 py-1 rounded-full border border-blue-200 dark:border-blue-600 font-medium"
                     >
-                      {tech}
+                      {tag}
                     </span>
                   ))}
                 </div>
