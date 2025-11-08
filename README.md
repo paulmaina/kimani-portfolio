@@ -162,7 +162,7 @@ $env:GOOGLE_CREDENTIALS_JSON='{"type":"service_account",...}'
 uvicorn api.submit-message:app --reload --host 0.0.0.0 --port 8000
 ```
 
-**Note:** The `.env` file is automatically loaded by the backend (using `python-dotenv`). Make sure `.env` is in your `.gitignore` (it already is).
+**Note:** The `.env` file is automatically loaded by the backend (using `python-dotenv`).
 
 If serving the frontend separately, call `http://localhost:8000/api/submit-message` from the client. Configure CORS as needed if you place the API on another domain.
 
