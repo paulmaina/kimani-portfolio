@@ -1,6 +1,12 @@
-import os, re, datetime, requests
+import os, re, datetime, requests, json
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+import gspread
+from google.oauth2 import service_account
+from dotenv import load_dotenv
+
+# Load environment variables from .env file (if it exists)
+load_dotenv()
 
 app = FastAPI()
 
@@ -18,6 +24,47 @@ HEADERS = {
 EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 
 HCAPTCHA_SECRET = os.getenv("HCAPTCHA_SECRET") or ""
+
+# Google Sheets configuration (optional)
+GOOGLE_SHEET_ID = os.getenv("GOOGLE_SHEET_ID") or ""
+GOOGLE_SHEET_NAME = os.getenv("GOOGLE_SHEET_NAME") or "Messages"
+GOOGLE_CREDENTIALS_JSON = os.getenv("GOOGLE_CREDENTIALS_JSON") or ""
+
+# Initialize Google Sheets client (optional)
+sheets_client = None
+if GOOGLE_CREDENTIALS_JSON and GOOGLE_SHEET_ID:
+  try:
+    creds_dict = json.loads(GOOGLE_CREDENTIALS_JSON)
+    credentials = service_account.Credentials.from_service_account_info(
+      creds_dict,
+      scopes=['https://www.googleapis.com/auth/spreadsheets']
+    )
+    sheets_client = gspread.authorize(credentials)
+  except Exception as e:
+    print(f"Warning: Failed to initialize Google Sheets client: {e}")
+
+def save_to_google_sheets(name: str, email: str, subject: str, message: str, ip: str):
+  """Save message to Google Sheets (optional, won't fail if not configured)"""
+  if not sheets_client or not GOOGLE_SHEET_ID:
+    return None
+  
+  try:
+    sheet = sheets_client.open_by_key(GOOGLE_SHEET_ID)
+    try:
+      worksheet = sheet.worksheet(GOOGLE_SHEET_NAME)
+    except gspread.exceptions.WorksheetNotFound:
+      # Create worksheet if it doesn't exist
+      worksheet = sheet.add_worksheet(title=GOOGLE_SHEET_NAME, rows=1000, cols=10)
+      # Add headers
+      worksheet.append_row(["Timestamp", "Name", "Email", "Subject", "Message", "IP Address"])
+    
+    timestamp = datetime.datetime.utcnow().isoformat() + "Z"
+    row_data = [timestamp, name, email, subject, message, ip]
+    worksheet.append_row(row_data)
+    return True
+  except Exception as e:
+    print(f"Error saving to Google Sheets: {e}")
+    return None
 
 @app.post("/api/submit-message")
 async def submit_message(req: Request):
@@ -82,23 +129,58 @@ async def submit_message(req: Request):
     return JSONResponse({"error": "Too many requests. Please try again later."}, status_code=429)
 
   payload = {"name": name, "email": email, "subject": subject, "message": message, "ip": ip}
+  
+  # Try to save to Supabase
+  supabase_saved = False
+  supabase_data = None
+  supabase_error = None
   try:
     r2 = requests.post(REST_URL, headers=HEADERS, json=payload, timeout=10)
+    if r2.status_code < 400:
+      try:
+        supabase_data = r2.json()
+        supabase_data = supabase_data[0] if isinstance(supabase_data, list) else supabase_data
+        supabase_saved = True
+      except Exception:
+        pass
+    else:
+      try:
+        supabase_error = r2.json()
+      except Exception:
+        supabase_error = {"error": "Insert failed"}
   except Exception:
-    return JSONResponse({"error": "Insert failed"}, status_code=500)
+    supabase_error = {"error": "Insert failed"}
 
-  if r2.status_code >= 400:
+  # Try to save to Google Sheets (even if Supabase failed)
+  google_sheets_saved = False
+  if sheets_client and GOOGLE_SHEET_ID:
     try:
-      err = r2.json()
+      save_to_google_sheets(name, email, subject, message, ip)
+      google_sheets_saved = True
     except Exception:
-      err = {"error": "Insert failed"}
-    return JSONResponse(err, status_code=500)
-
-  try:
-    data = r2.json()
-    data = data[0] if isinstance(data, list) else data
-  except Exception:
-    data = None
-  return JSONResponse({"ok": True, "message": data})
+      pass  # Don't fail if Google Sheets save fails
+  
+  # Return success if at least one save succeeded
+  if supabase_saved or google_sheets_saved:
+    response_data = {
+      "ok": True,
+      "message": supabase_data,
+      "saved_to": {
+        "supabase": supabase_saved,
+        "google_sheets": google_sheets_saved
+      }
+    }
+    # Include warnings if one backend failed
+    if not supabase_saved and supabase_error:
+      response_data["warnings"] = [f"Supabase save failed: {supabase_error.get('error', 'Unknown error')}"]
+    return JSONResponse(response_data)
+  else:
+    # Both failed
+    errors = []
+    if supabase_error:
+      errors.append(f"Supabase: {supabase_error.get('error', 'Unknown error')}")
+    if not google_sheets_saved and sheets_client:
+      errors.append("Google Sheets: Save failed")
+    return JSONResponse({"error": "Failed to save message. " + "; ".join(errors)}, status_code=500)
 
 
