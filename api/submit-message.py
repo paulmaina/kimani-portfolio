@@ -10,6 +10,10 @@ load_dotenv()
 
 app = FastAPI()
 
+# Feature flag: temporarily disable Supabase without removing the implementation.
+# Set DISABLE_SUPABASE=false (or unset it) when you want to re‑enable Supabase.
+DISABLE_SUPABASE = (os.getenv("DISABLE_SUPABASE") or "true").lower() in ("1", "true", "yes")
+
 SUPABASE_URL = os.getenv("SUPABASE_URL") or os.getenv("VITE_SUPABASE_URL") or ""
 SERVICE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or ""
 REST_URL = f"{SUPABASE_URL.rstrip('/')}/rest/v1/messages" if SUPABASE_URL else ""
@@ -68,9 +72,6 @@ def save_to_google_sheets(name: str, email: str, subject: str, message: str, ip:
 
 @app.post("/api/submit-message")
 async def submit_message(req: Request):
-  if not SUPABASE_URL or not SERVICE_KEY:
-    return JSONResponse({"error": "Server not configured: missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY"}, status_code=500)
-
   try:
     body = await req.json()
   except Exception:
@@ -107,49 +108,56 @@ async def submit_message(req: Request):
       return JSONResponse({"error": "CAPTCHA verification failed"}, status_code=400)
 
   ip = (req.headers.get("x-forwarded-for", "").split(",")[0].strip()) or (req.client.host if req.client else "unknown") or "unknown"
-
-  # Naive rate limit: 1/min per IP
-  minute_start = datetime.datetime.utcnow().replace(second=0, microsecond=0).isoformat()+"Z"
-  query = {
-    "select": "id,created_at",
-    "ip": f"eq.{ip}",
-    "created_at": f"gte.{minute_start}"
-  }
-  try:
-    r = requests.get(REST_URL, headers=HEADERS, params=query, timeout=10)
-  except Exception:
-    return JSONResponse({"error": "Rate check failed"}, status_code=500)
-  if r.status_code >= 400:
-    return JSONResponse({"error": "Rate check failed"}, status_code=500)
-  try:
-    recent = r.json()
-  except Exception:
-    recent = []
-  if recent:
-    return JSONResponse({"error": "Too many requests. Please try again later."}, status_code=429)
-
   payload = {"name": name, "email": email, "subject": subject, "message": message, "ip": ip}
   
-  # Try to save to Supabase
+  # -----------------------------
+  # Supabase (rate limiting + save)
+  # -----------------------------
   supabase_saved = False
   supabase_data = None
   supabase_error = None
-  try:
-    r2 = requests.post(REST_URL, headers=HEADERS, json=payload, timeout=10)
-    if r2.status_code < 400:
-      try:
-        supabase_data = r2.json()
-        supabase_data = supabase_data[0] if isinstance(supabase_data, list) else supabase_data
-        supabase_saved = True
-      except Exception:
-        pass
-    else:
-      try:
-        supabase_error = r2.json()
-      except Exception:
-        supabase_error = {"error": "Insert failed"}
-  except Exception:
-    supabase_error = {"error": "Insert failed"}
+
+  if not DISABLE_SUPABASE and SUPABASE_URL and SERVICE_KEY and REST_URL:
+    # Naive rate limit: 1/min per IP
+    minute_start = datetime.datetime.utcnow().replace(second=0, microsecond=0).isoformat()+"Z"
+    query = {
+      "select": "id,created_at",
+      "ip": f"eq.{ip}",
+      "created_at": f"gte.{minute_start}"
+    }
+    try:
+      r = requests.get(REST_URL, headers=HEADERS, params=query, timeout=10)
+    except Exception:
+      return JSONResponse({"error": "Rate check failed"}, status_code=500)
+    if r.status_code >= 400:
+      return JSONResponse({"error": "Rate check failed"}, status_code=500)
+    try:
+      recent = r.json()
+    except Exception:
+      recent = []
+    if recent:
+      return JSONResponse({"error": "Too many requests. Please try again later."}, status_code=429)
+
+    # Try to save to Supabase
+    try:
+      r2 = requests.post(REST_URL, headers=HEADERS, json=payload, timeout=10)
+      if r2.status_code < 400:
+        try:
+          supabase_data = r2.json()
+          supabase_data = supabase_data[0] if isinstance(supabase_data, list) else supabase_data
+          supabase_saved = True
+        except Exception:
+          pass
+      else:
+        try:
+          supabase_error = r2.json()
+        except Exception:
+          supabase_error = {"error": "Insert failed"}
+    except Exception:
+      supabase_error = {"error": "Insert failed"}
+  else:
+    # Supabase is intentionally disabled; keep the code but do not call it.
+    supabase_error = {"error": "Supabase integration is currently disabled"}
 
   # Try to save to Google Sheets (even if Supabase failed)
   google_sheets_saved = False
