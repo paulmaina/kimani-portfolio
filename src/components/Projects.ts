@@ -10,12 +10,12 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    title: 'Project One',
-    description: 'A brief description of your first project. What was the challenge? What was your solution? What technologies did you use?',
+    title: 'Personal Portfolio & Technical Showcase',
+    description: 'DevOps-focused personal portfolio showcasing cloud, automation, and container projects, built with React, TypeScript, FastAPI, featuring secure contact backend and continuous deployment workflows.',
     image: '/images/project-1.jpg',
-    liveUrl: '#',
-    githubUrl: '#',
-    tags: ['React', 'Node.js', 'Express', 'MongoDB'],
+    liveUrl: 'https://paulkimani.vercel.app/',
+    githubUrl: 'https://github.com/paulmaina/kimani-portfolio',
+    tags: ['React', 'FastAPI', 'Supabase', 'CI/CD', 'Containers', 'Cloud'],
   },
   {
     title: 'Task App',
